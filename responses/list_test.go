@@ -12,8 +12,8 @@ func TestListSlashDelimiter(t *testing.T) {
 
 	if err := mbox.Parse([]interface{}{
 		[]interface{}{"\\Unseen"},
-		"/",
-		"INBOX",
+		&imap.Delimiter{"/"},
+		&imap.FolderName{"INBOX"},
 	}); err != nil {
 		t.Error(err)
 		t.FailNow()
@@ -30,7 +30,7 @@ func TestListNILDelimiter(t *testing.T) {
 	if err := mbox.Parse([]interface{}{
 		[]interface{}{"\\Unseen"},
 		nil,
-		"INBOX",
+		&imap.FolderName{"INBOX"},
 	}); err != nil {
 		t.Error(err)
 		t.FailNow()

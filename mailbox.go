@@ -100,21 +100,37 @@ func (info *MailboxInfo) Parse(fields []interface{}) error {
 		return err
 	}
 
-	// fmt.Printf("AAAA")
-	// fmt.Printf("%#v\n", fields[1])
-
 	// var ok bool
 	if fields[1] == nil {
 		info.Delimiter = ""
 	} else {
-		del := fields[1].(*Delimiter).Delimiter
-		info.Delimiter = del
+		switch fields[1].(type) {
+		case string:
+			info.Delimiter = fields[1].(string)
+			break
+		case *Delimiter:
+			info.Delimiter = fields[1].(*Delimiter).Delimiter
+		}
+
 	}
 
-	if name, err := ParseString(fields[2].(*FolderName).Name); err != nil {
-		return err
-	} else {
-		info.Name = CanonicalMailboxName(name)
+	switch fields[2].(type) {
+	case string:
+		{
+			if name, err := ParseString(fields[2]); err != nil {
+				return err
+			} else {
+				info.Name = CanonicalMailboxName(name)
+			}
+		}
+	case *FolderName:
+		{
+			if name, err := ParseString(fields[2].(*FolderName).Name); err != nil {
+				return err
+			} else {
+				info.Name = CanonicalMailboxName(name)
+			}
+		}
 	}
 
 	return nil

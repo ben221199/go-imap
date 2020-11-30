@@ -57,6 +57,9 @@ type Writer struct {
 }
 
 func (w *Writer) writeDelimiter(d *Delimiter) error {
+	if d == nil {
+		return w.writeString(nilAtom)
+	}
 	del := d.Delimiter
 	if del == "\\" || del == "\"" {
 		del = "\\" + del
@@ -65,6 +68,9 @@ func (w *Writer) writeDelimiter(d *Delimiter) error {
 }
 
 func (w *Writer) writeFolderName(fn *FolderName) error {
+	if fn == nil {
+		return w.writeString(nilAtom)
+	}
 	if strings.EqualFold(fn.Name, "INBOX") {
 		return w.writeString("INBOX")
 	}
